@@ -23,68 +23,24 @@
     <script src="smoke.js"></script>
 
 
-    <div id='resume_audio'></div>
+    <div id='playThesound'></div>
 
-    <script>
-        // get and format div element
-        const div_0  = document.getElementById ('resume_audio')
-        // div_0.width  = div_0.parentNode.scrollWidth
-        // div_0.style.height     = `${ div_0.width * 9 / 16 }px`
-        // div_0.style.textAlign  = 'center'
-        // div_0.style.lineHeight = div_0.style.height
-        // div_0.style.fontSize   = '36px'
-        // div_0.style.fontStyle  = 'italic'
-        // div_0.style.color      = 'white'
-        // div_0.style.fontFamily = 'monospace'
-        // div_0.style.backgroundColor = 'hotpink'
-    
+    <script>    
         // get and suspend audio context
         const audio_context = new AudioContext ()
         audio_context.suspend ()
+  
     
-        // create string with context state
-        // const init_msg = `audio context is ${ audio_context.state }`
-    
-        // // convert string to uppercase and pass to div element
-        // div_0.innerText = init_msg.toUpperCase ()
-    
-        // define an async click handler function 
+        // this is the async click handler function 
         async function init_audio () {
     
             // wait for audio context to resume
             await audio_context.resume ()
-    
-            // then set background colour
-            // div_0.style.backgroundColor = 'limegreen'
-    
-            // // create string with new context state
-            // const msg = `audio context is ${ audio_context.state }`
-    
-            // // unitalicise text style
-            // div_0.style.fontStyle  = 'normal'
-    
-            // convert to uppercase and pass to div element
-            div_0.innerText = msg.toUpperCase ()
         }
     
-        // pass anonymous function to the .onclick property
-        // of the div element
-        div_0.onclick = _ => {
-    
-            // if audio context is not running
-            if (audio_context.state != 'running') {
-                
-                // call the async init audio function
-                init_audio ()
-            }
-        }
-
-
-
-
       // get the button and store it in a variable
       const btn = document.getElementById ('tone_switch')
-      btn.innerText = 'Press for wind sound!' // give it some text
+      btn.innerText = 'Press for wind sound!' // button text!
       btn.value = 'off'                 // give it a value
 
       // declare a function for toggling the sound
@@ -117,9 +73,7 @@
           }
       }
 
-      // this is the click handler for the button
-      // we are using arrow notation to write
-      // a function with no name
+      // button's click handler 
       // ie. an anonymous function
       btn.onclick = () => {
 
@@ -134,33 +88,30 @@
 
 
 
-      // store a new oscillator node in a variable
+      // store 5 new oscillator nodes in a variable
       const osc_node = audio_context.createOscillator ()
       const osc_node2 = audio_context.createOscillator ()
       const osc_node3 = audio_context.createOscillator ()
       const osc_node4 = audio_context.createOscillator ()
       const osc_node5 = audio_context.createOscillator ()
 
-      // oscillators come in four flavours:
-      // sine, triangle, sawtooth, and square
-      // sonically, sine is the simplest
-      // giving a pure note with no harmonics
+      // assign the ocsillator type to sine
       osc_node.type = 'sine'
       osc_node2.type = 'sine'
       osc_node3.type = 'sine'
       osc_node4.type = 'sine'
       osc_node5.type = 'sine'
 
-      // this is the oscillations per second
+      // this is the initial oscillations per second
       // or Hertz (Hz)
-      // of the oscillator
+      // of the oscillators
       osc_node.frequency.setValueAtTime(160, audio_context.currentTime)
       osc_node2.frequency.setValueAtTime(200, audio_context.currentTime)
       osc_node3.frequency.setValueAtTime(500, audio_context.currentTime)
       osc_node4.frequency.setValueAtTime(700, audio_context.currentTime)
       osc_node5.frequency.setValueAtTime(100, audio_context.currentTime)
 
-      // store a new gain node in a variable
+      // store a new gain/amplifier node in a variable
       const amp_node = audio_context.createGain ()
 
       // set the gain of that node to 0
@@ -187,8 +138,6 @@
       osc_node4.start ()    
       osc_node5.start ()    
 
-      // ramp up gain to maximum over 2 seconds
-      // amp_node.gain.linearRampToValueAtTime(1, audio_context.currentTime + 2)
 
 
 
@@ -205,8 +154,8 @@
         osc_node5.frequency.linearRampToValueAtTime(newFrequency+600, audio_context.currentTime + 2);
       }
 
-      // call updateFrequency() every 1.5 to 2 seconds using setInterval()
-      setInterval(updateFrequency, Math.random() * 700) + 500;
+      // call updateFrequency() every 0.5 to 0.7 seconds using setInterval()
+      setInterval(updateFrequency, Math.random() * 700 + 500);
 
 
 

@@ -1,0 +1,278 @@
+<!doctype html>
+<head>
+    <title> h u g h f :^) </title>
+
+    <style>
+        #sprite {
+          position: absolute;
+          width: 260px;
+          height: 225px;
+          background-image: url('spriterendanim.png');
+        }
+      </style>
+    
+
+</head>
+
+<body>
+
+    <div align='center' style="background-color: green;"><button id='tone_switch' style="background-color: turquoise;"></button></div>
+
+    <script src="sketch.js"></script>
+    <script src="rainfall.js"></script>
+    <script src="smoke.js"></script>
+
+
+    <div id='resume_audio'></div>
+
+    <script>
+        // get and format div element
+        const div_0  = document.getElementById ('resume_audio')
+        // div_0.width  = div_0.parentNode.scrollWidth
+        // div_0.style.height     = `${ div_0.width * 9 / 16 }px`
+        // div_0.style.textAlign  = 'center'
+        // div_0.style.lineHeight = div_0.style.height
+        // div_0.style.fontSize   = '36px'
+        // div_0.style.fontStyle  = 'italic'
+        // div_0.style.color      = 'white'
+        // div_0.style.fontFamily = 'monospace'
+        // div_0.style.backgroundColor = 'hotpink'
+    
+        // get and suspend audio context
+        const audio_context = new AudioContext ()
+        audio_context.suspend ()
+    
+        // create string with context state
+        // const init_msg = `audio context is ${ audio_context.state }`
+    
+        // // convert string to uppercase and pass to div element
+        // div_0.innerText = init_msg.toUpperCase ()
+    
+        // define an async click handler function 
+        async function init_audio () {
+    
+            // wait for audio context to resume
+            await audio_context.resume ()
+    
+            // then set background colour
+            // div_0.style.backgroundColor = 'limegreen'
+    
+            // // create string with new context state
+            // const msg = `audio context is ${ audio_context.state }`
+    
+            // // unitalicise text style
+            // div_0.style.fontStyle  = 'normal'
+    
+            // convert to uppercase and pass to div element
+            div_0.innerText = msg.toUpperCase ()
+        }
+    
+        // pass anonymous function to the .onclick property
+        // of the div element
+        div_0.onclick = _ => {
+    
+            // if audio context is not running
+            if (audio_context.state != 'running') {
+                
+                // call the async init audio function
+                init_audio ()
+            }
+        }
+
+
+
+
+      // get the button and store it in a variable
+      const btn = document.getElementById ('tone_switch')
+      btn.innerText = 'Press for wind sound!' // give it some text
+      btn.value = 'off'                 // give it a value
+
+      // declare a function for toggling the sound
+      function toggle_sound () {
+
+          // if button value is 'off'
+          if (btn.value == 'off') {
+
+              // set the gain to 0.3
+              amp_node.gain.value = 0.1
+
+              // set the value to 'on'
+              btn.value = 'on'
+
+              // change the text
+              btn.innerText = 'Press to stop!'
+          }
+
+          // if button value is `on`
+          else if (btn.value = 'on') {
+
+              // set the gain to 0
+              amp_node.gain.value = 0
+
+              // set the value to `off`
+              btn.value = 'off'
+
+              // change the text
+              btn.innerText = 'Press for wind sound!'
+          }
+      }
+
+      // this is the click handler for the button
+      // we are using arrow notation to write
+      // a function with no name
+      // ie. an anonymous function
+      btn.onclick = () => {
+
+          // if the audio context is still suspended
+          // resume the audio context first
+          if (audio_context.state != 'running') init_audio ()
+
+          // then call the toggle sound function
+          toggle_sound ()
+      }
+
+
+
+
+      // store a new oscillator node in a variable
+      const osc_node = audio_context.createOscillator ()
+      const osc_node2 = audio_context.createOscillator ()
+      const osc_node3 = audio_context.createOscillator ()
+      const osc_node4 = audio_context.createOscillator ()
+      const osc_node5 = audio_context.createOscillator ()
+
+      // oscillators come in four flavours:
+      // sine, triangle, sawtooth, and square
+      // sonically, sine is the simplest
+      // giving a pure note with no harmonics
+      osc_node.type = 'sine'
+      osc_node2.type = 'sine'
+      osc_node3.type = 'sine'
+      osc_node4.type = 'sine'
+      osc_node5.type = 'sine'
+
+      // this is the oscillations per second
+      // or Hertz (Hz)
+      // of the oscillator
+      osc_node.frequency.setValueAtTime(160, audio_context.currentTime)
+      osc_node2.frequency.setValueAtTime(200, audio_context.currentTime)
+      osc_node3.frequency.setValueAtTime(500, audio_context.currentTime)
+      osc_node4.frequency.setValueAtTime(700, audio_context.currentTime)
+      osc_node5.frequency.setValueAtTime(100, audio_context.currentTime)
+
+      // store a new gain node in a variable
+      const amp_node = audio_context.createGain ()
+
+      // set the gain of that node to 0
+      // ie. don't let any sound through
+      amp_node.gain.setValueAtTime(0, audio_context.currentTime)
+
+      // connect the oscillator node
+      // to the gain node
+      osc_node.connect (amp_node)
+      osc_node2.connect (amp_node)
+      osc_node3.connect (amp_node)
+      osc_node4.connect (amp_node)
+      osc_node5.connect (amp_node)
+
+      // connect the gain node to
+      // the audio output device
+      // on the audio context
+      amp_node.connect (audio_context.destination)
+
+      // start the oscillator
+      osc_node.start ()    
+      osc_node2.start ()    
+      osc_node3.start ()    
+      osc_node4.start ()    
+      osc_node5.start ()    
+
+      // ramp up gain to maximum over 2 seconds
+      // amp_node.gain.linearRampToValueAtTime(1, audio_context.currentTime + 2)
+
+
+
+      // define a function to update frequency every two seconds for WIND HOWL
+      function updateFrequency() {
+        // generate a random frequency between 160 and 180 Hz
+        const newFrequency = Math.floor(Math.random() * 180) + 160;
+
+        // ramp frequency to new value over 2 seconds
+        osc_node.frequency.linearRampToValueAtTime(newFrequency, audio_context.currentTime + 2);
+        osc_node2.frequency.linearRampToValueAtTime(newFrequency+200, audio_context.currentTime + 2);
+        osc_node3.frequency.linearRampToValueAtTime(newFrequency+700, audio_context.currentTime + 2);
+        osc_node4.frequency.linearRampToValueAtTime(newFrequency+1000, audio_context.currentTime + 2);
+        osc_node5.frequency.linearRampToValueAtTime(newFrequency+600, audio_context.currentTime + 2);
+      }
+
+      // call updateFrequency() every 1.5 to 2 seconds using setInterval()
+      setInterval(updateFrequency, Math.random() * 700) + 500;
+
+
+
+// ramp down gain to 0 over 2 seconds
+// amp_node.gain.linearRampToValueAtTime(0, audio_context.currentTime + 6);
+
+</script> 
+
+
+
+    <div id="sprite"></div>
+
+    <script>
+      // Define the sprite sheet properties
+      const spriteWidth = 260;
+      const spriteHeight = 225;
+      const sheetWidth = 260*6;
+      const sheetHeight = 225;
+
+      const framesPerRow = sheetWidth / spriteWidth;
+      const framesPerColumn = sheetHeight / spriteHeight;
+      const framesPerAnimation = 4;
+
+      // Set initial position and frame
+      let posX = (cnv.width/2)+420;
+      let posY = (cnv.width/2)-300;
+      let currentFrame = 0;
+      let currentAnimation = 0;
+      let isAnimating = true;
+
+      // Define the ranges of frames for each animation
+      const animationFrames = [
+        { startFrame: 0, endFrame: 3 },    
+        { startFrame: 4, endFrame: 7 },    
+        { startFrame: 8, endFrame: 11 },   
+        { startFrame: 12, endFrame: 15 }, 
+      ];
+
+      // Get the sprite element
+      const sprite = document.getElementById('sprite');
+
+      // Update the sprite's position and frame
+      function updateSprite() {
+        sprite.style.backgroundPosition = `-${currentFrame * spriteWidth}px -${posY}px`;
+        sprite.style.left = `${posX}px`;
+        sprite.style.top = `${posY}px`;
+      }
+
+      // Handle animation frames
+      function handleAnimationFrames() {
+        if (isAnimating) {
+          currentFrame++;
+          if (currentFrame > animationFrames[currentAnimation].endFrame) {
+            currentFrame = animationFrames[currentAnimation].startFrame;
+          }
+          updateSprite();
+        }
+      }
+
+      // Start animation loop
+      setInterval(handleAnimationFrames, 150); // Adjust the interval as desired
+
+      // Initialize the sprite's position and frame
+      updateSprite();
+    </script>
+
+  
+</body>
+
